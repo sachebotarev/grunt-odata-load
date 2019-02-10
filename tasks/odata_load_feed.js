@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 			rewrite: true,
 			dest: "./tmp",
 			feeds: ["*"],
-			mode: "none"
+			mode: "mock"
 		});
 
 		grunt.verbose.writeflags(options, 'Options');
