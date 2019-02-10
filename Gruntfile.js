@@ -29,22 +29,23 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    odata_load: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!'
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-        }
+    odata_load_feed: {
+      northwind: {
+          options: {
+            url: "https://services.odata.org/V2/Northwind/Northwind.svc/",
+            dest: "./tmp",
+            feeds: ["*", "!C*"],
+            mode: "clean"
+          }
+      }
+    },
+
+    odata_load_metadata: {
+      northwind: {
+          options: {
+            url: "https://services.odata.org/V2/Northwind/Northwind.svc/",
+            dest: "./tmp"
+          }
       }
     },
 
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'odata_load', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'odata_load_feed', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
