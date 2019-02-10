@@ -22,8 +22,8 @@ module.exports = function (grunt) {
 	grunt.registerMultiTask('odata_load_feed', 'Grunt plugin for oData feed load', function () {
 
 		// service Url must be ended by slash
-		const fixUrl = (url) => {
-			return url.endsWith("/") ? url : (url + "/");
+		const fixUrl = (href) => {
+			return href.endsWith("/") ? href : (href + "/");
 		}
 
 		// marge options
@@ -68,7 +68,7 @@ module.exports = function (grunt) {
 		}
 
 		// main
-		var done = this.async();
+		let done = this.async();
 		Promise.resolve(serviceURL)
 			.then((url) => {
 				return getEntitySets(url)
@@ -127,7 +127,7 @@ module.exports = function (grunt) {
 		}
 
 		// sens oData request and get body as result
-		const sendRequest = (url, entitySetName) => {
+		const sendRequest = (url) => {
 			return new Promise((resolve, reject) => {
 				getRequestByUrl(url).get(url, (res) => {
 					const {

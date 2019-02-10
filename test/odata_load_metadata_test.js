@@ -22,14 +22,14 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
-exports.odata_load = {
+exports.odata_load_metadata = {
   setUp: function(done) {
     done();
   },
   default_options: function(test) {
     test.expect(1);
-	let entityList = grunt.file.expand("./tmp/*.json");
-	test.equal(entityList.length, 20, "Deirectory 'tmp' must be contain 20 json files");
+	let entityList = grunt.file.expand("./tmp/metadata.xml");
+	test.equal(entityList.length, 1, "Deirectory 'tmp' must be contain 20 json files");
     test.done();
   }
 };
