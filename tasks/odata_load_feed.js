@@ -26,8 +26,9 @@ module.exports = function (grunt) {
 			return href.endsWith("/") ? href : (href + "/");
 		}
 
+
 		// marge options
-		let options = this.options({
+		const options = this.options({
 			rewrite: true,
 			dest: "./tmp",
 			feeds: ["*"],
@@ -41,18 +42,11 @@ module.exports = function (grunt) {
 			grunt.verbose.error();
 			grunt.fail.fatal("oData service ULR not found or empty, set  optons - url");
 		}
-		grunt.verbose.ok(`oData service ULR: ${options.url}`);
 
 		options.url = fixUrl(options.url);
 
 		// create service url
 		let serviceURL = new URL(options.url);
-
-		// authory
-		if (options.auth && options.auth.username && options.auth.password) {
-			serviceURL.username = options.auth.username,
-				serviceURL.password = options.auth.password
-		}
 
 		// add format, json only
 		serviceURL.searchParams.append("$format", 'json');
@@ -66,6 +60,8 @@ module.exports = function (grunt) {
 		if (options.skip) {
 			serviceURL.searchParams.append("skip", options.skip);
 		}
+
+		grunt.verbose.ok(`oData service ULR: ${serviceURL.href}`);
 
 		// main
 		let done = this.async();
@@ -91,6 +87,21 @@ module.exports = function (grunt) {
 				grunt.fail.fatal(error.message);
 			})
 
+		const urlToOptions = (url, auth) => {
+			let options =  {
+				protocol: url.protocol,
+				hostname : url.hostname,
+				port: url.port,
+				path:  url.pathname + url.search,
+			}
+
+			if (auth && auth.username && auth.password){
+				options['auth'] = `${auth.username}:${auth.password}`
+			}
+
+			return options;
+		}
+
 		// get entity set array from oData service document
 		const getEntitySets = (url) => {
 			return sendRequest(url)
@@ -105,7 +116,7 @@ module.exports = function (grunt) {
 			feedURL.pathname = serviceUrl.pathname + entitySetName;
 			return sendRequest(feedURL, entitySetName)
 				.then((res) => {
-					grunt.log.write(`${entitySetName} -> ${feedURL.href} -> `)
+					grunt.log.write(`${entitySetName} -> ${feedURL .href} -> `)
 					grunt.verbose.ok();
 					return {
 						name: entitySetName,
@@ -129,7 +140,7 @@ module.exports = function (grunt) {
 		// sens oData request and get body as result
 		const sendRequest = (url) => {
 			return new Promise((resolve, reject) => {
-				getRequestByUrl(url).get(url, (res) => {
+				getRequestByUrl(url).get(urlToOptions(url, options.auth), (res) => {
 					const {
 						statusCode
 					} = res;

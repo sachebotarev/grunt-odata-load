@@ -57,6 +57,21 @@ module.exports = function (grunt) {
 				grunt.fail.fatal(error.message);
 			})
 
+		const urlToOptions = (url, auth) => {
+			let options =  {
+				protocol: url.protocol,
+				hostname : url.hostname,
+				port: url.port,
+				path:  url.pathname + url.search,
+			}
+
+			if (auth && auth.username && auth.password){
+				options['auth'] = `${auth.username}:${auth.password}`
+			}
+
+			return options;
+		}
+
 		const saveMetadata = (metadata) => {
 			return new Promise((resolve, reject) => {
 				if (grunt.file.exists(options.dest)) {
@@ -81,7 +96,7 @@ module.exports = function (grunt) {
 
 		const sendRequest = (url) => {
 			return new Promise((resolve, reject) => {
-				getRequestByUrl(url).get(url, (res) => {
+				getRequestByUrl(url).get(urlToOptions(url, options.auth), (res) => {
 					const {
 						statusCode
 					} = res;
