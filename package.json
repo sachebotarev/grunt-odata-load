@@ -1,7 +1,7 @@
 {
   "name": "grunt-odata-load",
   "description": "Grunt plugin for oData feed load",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "homepage": "https://github.com/sachebotarev/grunt-odata-load",
   "author": {
     "name": "Sergey A. Chebotarev",
