@@ -13,7 +13,7 @@ const url = require('url');
 
 module.exports = function (grunt) {
 
-	const url = require('url');
+	const { URL } = require('url');
 	const http = require('http');
 	const https = require('https');
 	const fs = require('fs');
